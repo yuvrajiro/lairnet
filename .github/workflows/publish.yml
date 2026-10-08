@@ -44,10 +44,13 @@ jobs:
         with:
           python-version: "3.11"      # tomllib, used by the version check below
 
+      # [plots] is required to run the suite at all, not merely to widen it:
+      # tests/test_plotting.py imports matplotlib at module scope, so without it
+      # pytest cannot even collect. This must stay in step with tests.yml.
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[dev]"
+          python -m pip install -e ".[dev,plots]"
 
       # A broken build must not reach PyPI; an upload cannot be taken back.
       - name: Test
