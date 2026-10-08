@@ -4,6 +4,15 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+# One Pages deployment at a time. Not cancel-in-progress: a half-finished
+# deployment would leave the site in whatever state it reached.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   sphinx:
     runs-on: ubuntu-latest
@@ -54,3 +63,28 @@ jobs:
                     "`python docs/make_notebooks.py`.")
               sys.exit(1)
           PY
+
+      # Packaged for Pages rather than as a plain artifact; deploy-pages below
+      # only accepts this format.
+      - name: Package the site for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+  deploy:
+    name: Deploy to lairnet.statml.in
+    needs: sphinx
+    # Only the main branch publishes. Pull requests still build and run every
+    # gate above, they just do not touch the live site.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write          # publish to Pages
+      id-token: write       # the OIDC token Pages verifies the deployment with
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

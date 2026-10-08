@@ -19,6 +19,12 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 html_theme = "pydata_sphinx_theme"
 html_title = "LAIR-Net"
 html_static_path = ["_static"]
+# Served from GitHub Pages at a custom domain. CNAME is what tells Pages
+# which domain this site answers on, and .nojekyll stops any Jekyll pass
+# from dropping the _static directory Sphinx writes. Both have to sit at
+# the root of the built site, which is what html_extra_path does.
+html_baseurl = "https://lairnet.statml.in/"
+html_extra_path = ["CNAME", ".nojekyll"]
 html_logo = "_static/logo.svg"
 html_favicon = "_static/favicon.svg"
 html_css_files = ["custom.css"]

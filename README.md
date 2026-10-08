@@ -8,14 +8,14 @@
 
 [![PyPI](https://img.shields.io/pypi/v/lairnet.svg)](https://pypi.org/project/lairnet/)
 [![Python](https://img.shields.io/pypi/pyversions/lairnet.svg)](https://pypi.org/project/lairnet/)
-[![Docs](https://img.shields.io/badge/docs-lairnet.readthedocs.io-1F8A82.svg)](https://lairnet.readthedocs.io/)
+[![Docs](https://img.shields.io/badge/docs-lairnet.statml.in-1F8A82.svg)](https://lairnet.statml.in/)
 [![Tests](https://github.com/yuvrajiro/lairnet/actions/workflows/tests.yml/badge.svg)](https://github.com/yuvrajiro/lairnet/actions/workflows/tests.yml)
 [![Docs build](https://github.com/yuvrajiro/lairnet/actions/workflows/docs.yml/badge.svg)](https://github.com/yuvrajiro/lairnet/actions/workflows/docs.yml)
 
-[Documentation](https://lairnet.readthedocs.io/) ·
-[Gallery](https://lairnet.readthedocs.io/en/latest/gallery.html) ·
-[Notebooks](https://lairnet.readthedocs.io/en/latest/usage.html) ·
-[API](https://lairnet.readthedocs.io/en/latest/api.html)
+[Documentation](https://lairnet.statml.in/) ·
+[Gallery](https://lairnet.statml.in/gallery.html) ·
+[Notebooks](https://lairnet.statml.in/usage.html) ·
+[API](https://lairnet.statml.in/api.html)
 
 </div>
 
@@ -50,7 +50,7 @@ backend policy, model-selection helpers, and a much larger user API.
 
 <img src="https://raw.githubusercontent.com/yuvrajiro/lairnet/main/docs/_static/gallery/feature_importance.png" width="100%" alt="permutation importance: the five informative Friedman-1 features separate from the five noise features, with any bar whose error crosses zero greyed out">
 
-Every figure in the [gallery](https://lairnet.readthedocs.io/en/latest/gallery.html)
+Every figure in the [gallery](https://lairnet.statml.in/gallery.html)
 is produced by `python docs/make_gallery.py`, which calls the same public
 functions documented here. Nothing is drawn by hand.
 
@@ -143,10 +143,10 @@ print(search.align_profile())
 ```
 
 Four executed notebooks walk through the rest:
-[getting started](https://lairnet.readthedocs.io/en/latest/examples/01_getting_started.html),
-[interpreting a fitted model](https://lairnet.readthedocs.io/en/latest/examples/02_interpreting_a_model.html),
-[tuning and model selection](https://lairnet.readthedocs.io/en/latest/examples/03_model_selection.html),
-and [backends and speed](https://lairnet.readthedocs.io/en/latest/examples/04_backends_and_speed.html).
+[getting started](https://lairnet.statml.in/examples/01_getting_started.html),
+[interpreting a fitted model](https://lairnet.statml.in/examples/02_interpreting_a_model.html),
+[tuning and model selection](https://lairnet.statml.in/examples/03_model_selection.html),
+and [backends and speed](https://lairnet.statml.in/examples/04_backends_and_speed.html).
 They are committed with their outputs, so the numbers on those pages are what
 the code printed.
 
