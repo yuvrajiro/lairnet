@@ -8,8 +8,8 @@ new method: everything it reports is available piecewise from
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Optional, Sequence
 
 import numpy as np
 
@@ -37,7 +37,7 @@ class ModelExplanation:
     depth: DepthCurve
     agreement: LayerAgreement
     anchor: dict
-    alignment: Optional[AlignSensitivity] = None
+    alignment: AlignSensitivity | None = None
     layer_conditions: np.ndarray = field(default_factory=lambda: np.array([]))
     layer_solvers: list = field(default_factory=list)
     anchor_converged: bool = True
@@ -99,8 +99,8 @@ def explain_model(
     y_eval=None,
     *,
     n_repeats: int = 10,
-    align_values: Optional[Sequence[float]] = None,
-    random_state: Optional[int] = None,
+    align_values: Sequence[float] | None = None,
+    random_state: int | None = None,
 ) -> ModelExplanation:
     """Run the inspection suite on a fitted estimator.
 

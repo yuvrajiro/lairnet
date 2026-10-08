@@ -23,7 +23,6 @@ LAPACK version. Here the conditioning is measured and reported instead.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Tuple
 
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve, eigh
@@ -83,7 +82,7 @@ class GramCache:
         self._AtA = self.A.T @ self.A
         self._Aty = self.A.T @ self.y
 
-    def build(self, H: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def build(self, H: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """Return ``(D.T @ D, D.T @ y)`` for ``D = [A, H]``."""
         H = np.ascontiguousarray(H, dtype=np.float64)
         if H.shape[0] != self.n_samples:

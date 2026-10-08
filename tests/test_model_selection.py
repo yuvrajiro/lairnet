@@ -81,7 +81,7 @@ def test_random_search_and_custom_splitter(data):
 
 def test_rejects_unknown_search_kind(data):
     Xtr, _, ytr, _ = data
-    with pytest.raises(ValueError, match="grid.*random"):
+    with pytest.raises(ValueError, match=r"grid.*random"):
         LAIRNetCV(search="bogus", param_grid={"align": [0.5]}).fit(Xtr, ytr)
 
 

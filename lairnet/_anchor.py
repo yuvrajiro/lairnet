@@ -35,7 +35,7 @@ See ``benchmarks/RESULTS.md`` for the measurements the ``auto`` policy rests on.
 from __future__ import annotations
 
 import warnings
-from typing import Callable, Optional, Tuple
+from typing import Callable
 
 import numpy as np
 from scipy.optimize import minimize
@@ -46,8 +46,12 @@ class ConvergenceWarning(UserWarning):
     """The anchor fit stopped on its iteration cap rather than on ``tol``."""
 
 
-__all__ = ["AnchorNet", "available_backends", "ACTIVATIONS",
-           "ConvergenceWarning"]
+__all__ = [
+    "ACTIVATIONS",
+    "AnchorNet",
+    "ConvergenceWarning",
+    "available_backends",
+]
 
 
 def _tanh(z):
@@ -78,7 +82,7 @@ ACTIVATIONS: dict = {
 }
 
 
-def available_backends() -> Tuple[str, ...]:
+def available_backends() -> tuple[str, ...]:
     """Backends importable in this environment.
 
     The order is discovery order and carries no meaning. Which backend is
@@ -246,9 +250,9 @@ class AnchorNet(TransformerMixin, BaseEstimator):
         max_iter: int = 5000,
         tol: float = 1e-8,
         backend: str = "auto",
-        device: Optional[str] = None,
-        random_state: Optional[int] = None,
-        callback: Optional[Callable] = None,
+        device: str | None = None,
+        random_state: int | None = None,
+        callback: Callable | None = None,
     ):
         self.n_hidden = n_hidden
         self.activation = activation
@@ -280,7 +284,7 @@ class AnchorNet(TransformerMixin, BaseEstimator):
         return ACTIVATIONS[self.activation]
 
     # ----------------------------------------------------------------- API
-    def fit(self, X: np.ndarray, y: np.ndarray) -> "AnchorNet":
+    def fit(self, X: np.ndarray, y: np.ndarray) -> AnchorNet:
         X = np.ascontiguousarray(X, dtype=np.float64)
         y = np.ascontiguousarray(y, dtype=np.float64)
         if y.ndim == 1:

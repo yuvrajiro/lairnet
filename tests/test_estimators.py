@@ -59,7 +59,7 @@ def test_works_in_pipeline_and_search(regression):
 
 def test_predictions_are_reproducible(regression):
     Xtr, Xte, ytr, _ = regression
-    kw = dict(n_hidden=20, n_layers=4, random_state=7)
+    kw = {"n_hidden": 20, "n_layers": 4, "random_state": 7}
     a = LAIRNetRegressor(**kw).fit(Xtr, ytr).predict(Xte)
     b = LAIRNetRegressor(**kw).fit(Xtr, ytr).predict(Xte)
     np.testing.assert_allclose(a, b, rtol=1e-12)

@@ -116,7 +116,7 @@ def test_layer_agreement_correlation_is_well_formed(fitted):
 def test_align_zero_removes_the_anchor(fitted):
     """At align=0 the anchor cannot influence the prediction, so changing the
     anchor's regularisation must change nothing."""
-    model, Xtr, ytr, Xte, _ = fitted
+    _model, Xtr, ytr, Xte, _ = fitted
     a = LAIRNetRegressor(n_hidden=40, n_layers=8, align=0.0,
                          anchor_alpha=1e-6, random_state=0).fit(Xtr, ytr)
     b = LAIRNetRegressor(n_hidden=40, n_layers=8, align=0.0,

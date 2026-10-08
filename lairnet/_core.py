@@ -32,14 +32,13 @@ Speed notes, since that is the point of this package:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Sequence, Tuple
 
 import numpy as np
 
 from ._anchor import ACTIVATIONS, AnchorNet
 from ._linalg import GramCache, RidgeSolution, solve_ridge
 
-__all__ = ["LAIRCore", "LayerState", "AGGREGATORS"]
+__all__ = ["AGGREGATORS", "LAIRCore", "LayerState"]
 
 
 def _median(P: np.ndarray) -> np.ndarray:
@@ -111,14 +110,14 @@ class LAIRCore:
     anchor_backend: str = "auto"
     anchor_max_iter: int = 5000
     anchor_tol: float = 1e-8
-    device: Optional[str] = None
+    device: str | None = None
     dtype: type = np.float64
-    random_state: Optional[int] = None
+    random_state: int | None = None
 
     # -- fitted state -------------------------------------------------------
-    anchor_: Optional[AnchorNet] = field(default=None, init=False)
-    weights_: List[np.ndarray] = field(default_factory=list, init=False)
-    layers_: List[LayerState] = field(default_factory=list, init=False)
+    anchor_: AnchorNet | None = field(default=None, init=False)
+    weights_: list[np.ndarray] = field(default_factory=list, init=False)
+    layers_: list[LayerState] = field(default_factory=list, init=False)
 
     # ------------------------------------------------------------- helpers
     def _check(self) -> None:
@@ -156,13 +155,13 @@ class LAIRCore:
             self.weights_.append(W)
 
     # -------------------------------------------------------------- forward
-    def _states(self, X: np.ndarray, S: np.ndarray) -> List[np.ndarray]:
+    def _states(self, X: np.ndarray, S: np.ndarray) -> list[np.ndarray]:
         """Run the stack, returning the hidden state after every layer.
 
         Allocates two buffers and reuses them; the returned list holds copies,
         because callers need every depth at once for the readouts.
         """
-        n, d = X.shape
+        n, _d = X.shape
         m = self.n_hidden
         act = ACTIVATIONS[self.activation]
         Xc = np.ascontiguousarray(X, dtype=self.dtype)
@@ -170,7 +169,7 @@ class LAIRCore:
 
         H = np.zeros((n, m), dtype=self.dtype)
         buf = np.empty((n, m), dtype=self.dtype)
-        out: List[np.ndarray] = []
+        out: list[np.ndarray] = []
 
         for W in self.weights_:
             w0 = W[0]              # bias row
@@ -194,9 +193,9 @@ class LAIRCore:
         X: np.ndarray,
         y: np.ndarray,
         *,
-        validation: Optional[Tuple[np.ndarray, np.ndarray]] = None,
+        validation: tuple[np.ndarray, np.ndarray] | None = None,
         score_fn=None,
-    ) -> "LAIRCore":
+    ) -> LAIRCore:
         """Fit the anchor, the stack and one readout per depth."""
         self._check()
         X = np.ascontiguousarray(X, dtype=np.float64)
@@ -271,7 +270,7 @@ class LAIRCore:
 
     def predict_interval(
         self, X: np.ndarray, coverage: float = 0.9
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Empirical interval across depths.
 
         The stack produces ``n_layers`` predictions per sample, so a spread is

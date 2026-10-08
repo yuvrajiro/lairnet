@@ -17,14 +17,14 @@ reimplements them.
 
 from __future__ import annotations
 
-from typing import Mapping, Optional, Sequence, Union
+from collections.abc import Mapping, Sequence
 
 import numpy as np
 from sklearn.base import BaseEstimator, MetaEstimatorMixin, clone, is_classifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.utils.validation import check_is_fitted
 
-from .estimators import LAIRNetClassifier, LAIRNetRegressor
+from .estimators import LAIRNetRegressor
 
 __all__ = ["LAIRNetCV", "default_grid"]
 
@@ -112,18 +112,18 @@ class LAIRNetCV(MetaEstimatorMixin, BaseEstimator):
     def __init__(
         self,
         estimator=None,
-        param_grid: Optional[Union[Mapping, Sequence[Mapping]]] = None,
+        param_grid: Mapping | Sequence[Mapping] | None = None,
         *,
         search: str = "grid",
         n_iter: int = 30,
         cv=5,
         scoring=None,
-        n_jobs: Optional[int] = None,
+        n_jobs: int | None = None,
         refit: bool = True,
         verbose: int = 0,
         error_score=np.nan,
         return_train_score: bool = False,
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
     ):
         self.estimator = estimator
         self.param_grid = param_grid
@@ -147,10 +147,10 @@ class LAIRNetCV(MetaEstimatorMixin, BaseEstimator):
     def _build(self):
         base = self._base_estimator()
         grid = self.param_grid if self.param_grid is not None else default_grid()
-        common = dict(cv=self.cv, scoring=self.scoring, n_jobs=self.n_jobs,
-                      refit=self.refit, verbose=self.verbose,
-                      error_score=self.error_score,
-                      return_train_score=self.return_train_score)
+        common = {"cv": self.cv, "scoring": self.scoring, "n_jobs": self.n_jobs,
+                      "refit": self.refit, "verbose": self.verbose,
+                      "error_score": self.error_score,
+                      "return_train_score": self.return_train_score}
         if self.search == "grid":
             return GridSearchCV(base, grid, **common)
         if self.search == "random":

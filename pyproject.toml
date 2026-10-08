@@ -88,3 +88,20 @@ addopts = "-ra"
 [tool.ruff]
 line-length = 88
 target-version = "py39"
+
+# Pinned explicitly. Ruff's default selection changes between releases, so an
+# unpinned config makes the same code pass one week and fail the next -- which
+# is exactly what a lint gate must not do.
+#
+# The pyupgrade (UP) rules are safe here only because every module carries
+# `from __future__ import annotations`: annotations stay strings at runtime, so
+# `X | None` and `tuple[...]` work on the Python 3.9 this package supports.
+[tool.ruff.lint]
+select = [
+  "E",    # pycodestyle errors
+  "F",    # pyflakes: unused imports and undefined names
+  "I",    # import sorting
+  "UP",   # pyupgrade: modern typing syntax
+  "C4",   # flake8-comprehensions
+  "RUF",  # ruff's own rules
+]

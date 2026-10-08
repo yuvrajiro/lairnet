@@ -11,8 +11,9 @@ fitting path.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Sequence
+from typing import Callable
 
 import numpy as np
 from sklearn.base import clone, is_classifier
@@ -20,15 +21,15 @@ from sklearn.metrics import accuracy_score, r2_score
 from sklearn.utils.validation import check_is_fitted
 
 __all__ = [
-    "ImportanceResult",
-    "DepthCurve",
     "AlignSensitivity",
+    "DepthCurve",
+    "ImportanceResult",
     "LayerAgreement",
-    "permutation_importance",
-    "depth_curve",
     "align_sensitivity",
-    "layer_agreement",
     "anchor_contribution",
+    "depth_curve",
+    "layer_agreement",
+    "permutation_importance",
 ]
 
 
@@ -80,7 +81,7 @@ class ImportanceResult:
     #: Score before any shuffling.
     baseline_score: float
     #: Feature names when the estimator was fitted with them, else ``None``.
-    feature_names: Optional[List[str]] = None
+    feature_names: list[str] | None = None
 
     def ranking(self) -> np.ndarray:
         """Feature indices, most important first."""
@@ -103,8 +104,8 @@ def permutation_importance(
     y,
     *,
     n_repeats: int = 10,
-    scorer: Optional[Callable] = None,
-    random_state: Optional[int] = None,
+    scorer: Callable | None = None,
+    random_state: int | None = None,
 ) -> ImportanceResult:
     """Drop in score when each feature is shuffled.
 
@@ -172,7 +173,7 @@ class DepthCurve:
         return int(self.depths[int(np.argmax(self.scores))])
 
 
-def depth_curve(estimator, X, y, *, scorer: Optional[Callable] = None) -> DepthCurve:
+def depth_curve(estimator, X, y, *, scorer: Callable | None = None) -> DepthCurve:
     """Aggregate the first ``k`` depths, for every ``k``, and score each.
 
     Answers whether depth is helping. The layerwise predictions are computed
@@ -237,7 +238,7 @@ def align_sensitivity(
     align_values: Sequence[float] = (0.0, 0.1, 0.25, 0.5, 0.75, 0.9),
     X_valid=None,
     y_valid=None,
-    scorer: Optional[Callable] = None,
+    scorer: Callable | None = None,
 ) -> AlignSensitivity:
     """Refit across alignment coefficients and score each.
 
@@ -304,7 +305,7 @@ def anchor_contribution(
     X_eval,
     y_eval,
     *,
-    scorer: Optional[Callable] = None,
+    scorer: Callable | None = None,
 ):
     """Score with the anchor and with it switched off.
 

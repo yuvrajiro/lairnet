@@ -13,8 +13,6 @@ the inputs to :mod:`lairnet.explain` and :mod:`lairnet.plotting`.
 
 from __future__ import annotations
 
-from typing import List, Optional, Tuple
-
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.metrics import accuracy_score, r2_score
@@ -23,10 +21,9 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_is_fitted, check_X_y
 
 from ._compat import validate_data
+from ._core import LAIRCore
 
-from ._core import AGGREGATORS, LAIRCore
-
-__all__ = ["LAIRNetRegressor", "LAIRNetClassifier"]
+__all__ = ["LAIRNetClassifier", "LAIRNetRegressor"]
 
 _PARAM_DOC = """
     n_hidden : int, default=100
@@ -128,9 +125,9 @@ class _LAIRNetBase(BaseEstimator):
         anchor_backend: str = "auto",
         anchor_max_iter: int = 5000,
         anchor_tol: float = 1e-8,
-        device: Optional[str] = None,
+        device: str | None = None,
         dtype: type = np.float64,
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
     ):
         self.n_hidden = n_hidden
         self.n_layers = n_layers
@@ -188,13 +185,13 @@ class _LAIRNetBase(BaseEstimator):
 
     def _record(self, core: LAIRCore) -> None:
         self.core_ = core
-        self.layer_conditions_ = np.array([l.condition for l in core.layers_])
-        self.layer_solvers_ = [l.solver for l in core.layers_]
+        self.layer_conditions_ = np.array([layer.condition for layer in core.layers_])
+        self.layer_solvers_ = [layer.solver for layer in core.layers_]
         self.layer_state_deltas_ = np.array(
-            [l.state_delta for l in core.layers_])
+            [layer.state_delta for layer in core.layers_])
         self.layer_anchor_distances_ = np.array(
-            [l.anchor_distance for l in core.layers_])
-        self.layer_scores_ = np.array([l.train_score for l in core.layers_])
+            [layer.anchor_distance for layer in core.layers_])
+        self.layer_scores_ = np.array([layer.train_score for layer in core.layers_])
         a = core.anchor_
         self.anchor_converged_ = a.converged_
         self.anchor_status_ = a.status_
@@ -295,7 +292,7 @@ class LAIRNetRegressor(RegressorMixin, _LAIRNetBase):
             score_fn=r2_score)
         self._record(core)
         self.layer_valid_scores_ = np.array(
-            [l.valid_score for l in core.layers_])
+            [layer.valid_score for layer in core.layers_])
         return self
 
     def predict(self, X):
@@ -348,7 +345,7 @@ class LAIRNetClassifier(ClassifierMixin, _LAIRNetBase):
             score_fn=score_fn)
         self._record(core)
         self.layer_valid_scores_ = np.array(
-            [l.valid_score for l in core.layers_])
+            [layer.valid_score for layer in core.layers_])
         return self
 
     def _check_validation_labels(self, validation):

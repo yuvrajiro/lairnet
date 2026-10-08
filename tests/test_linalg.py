@@ -36,7 +36,7 @@ def test_gram_cache_reuse_across_layers(problem):
     rng = np.random.default_rng(1)
     for _ in range(4):
         Hk = np.tanh(rng.standard_normal(H.shape))
-        gram, rhs = cache.build(Hk)
+        gram, _rhs = cache.build(Hk)
         D = np.hstack([A, Hk])
         np.testing.assert_allclose(gram, D.T @ D, rtol=1e-10, atol=1e-10)
 

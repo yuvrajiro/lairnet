@@ -10,22 +10,21 @@ import subprocess
 import sys
 
 import matplotlib
-import numpy as np
 import pytest
 from sklearn.datasets import make_friedman1
 from sklearn.model_selection import train_test_split
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.pyplot as plt
 
-from lairnet import LAIRNetRegressor  # noqa: E402
-from lairnet.inspection import (  # noqa: E402
+from lairnet import LAIRNetRegressor
+from lairnet.inspection import (
     align_sensitivity,
     depth_curve,
     layer_agreement,
     permutation_importance,
 )
-from lairnet.plotting import (  # noqa: E402
+from lairnet.plotting import (
     plot_anchor_alignment,
     plot_depth_path,
     plot_feature_importance,

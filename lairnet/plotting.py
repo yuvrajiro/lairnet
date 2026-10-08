@@ -14,16 +14,14 @@ that can disagree with itself.
 
 from __future__ import annotations
 
-from typing import Optional, Sequence
-
 import numpy as np
 
 __all__ = [
-    "plot_feature_importance",
-    "plot_depth_path",
-    "plot_layer_diagnostics",
     "plot_anchor_alignment",
+    "plot_depth_path",
+    "plot_feature_importance",
     "plot_layer_agreement",
+    "plot_layer_diagnostics",
     "plot_prediction_band",
 ]
 

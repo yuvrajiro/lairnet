@@ -10,7 +10,7 @@ than repeated at every call site.
 
 from __future__ import annotations
 
-__all__ = ["validate_data", "SKLEARN_HAS_VALIDATE_DATA"]
+__all__ = ["SKLEARN_HAS_VALIDATE_DATA", "validate_data"]
 
 try:  # scikit-learn >= 1.6
     from sklearn.utils.validation import validate_data as _validate_data

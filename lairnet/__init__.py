@@ -25,25 +25,25 @@ from .estimators import LAIRNetClassifier, LAIRNetRegressor
 from .model_selection import LAIRNetCV, default_grid
 
 __all__ = [
-    # estimators
-    "LAIRNetRegressor",
-    "LAIRNetClassifier",
-    # search
-    "LAIRNetCV",
-    "default_grid",
+    "AGGREGATORS",
     # components
     "AnchorNet",
-    "LAIRCore",
-    "LayerState",
-    "AGGREGATORS",
+    "ConvergenceWarning",
     # readout solvers
     "GramCache",
+    "LAIRCore",
+    # search
+    "LAIRNetCV",
+    "LAIRNetClassifier",
+    # estimators
+    "LAIRNetRegressor",
+    "LayerState",
     "RidgeSolution",
-    "solve_ridge",
-    "solve_ridge_path",
     # utilities
     "available_backends",
-    "ConvergenceWarning",
+    "default_grid",
+    "solve_ridge",
+    "solve_ridge_path",
 ]
 
 __version__ = "0.1.0"

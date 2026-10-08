@@ -52,7 +52,7 @@ def test_numba_kernel_matches_the_numpy_objective(data):
     wrong kernel would break -- a wrong gradient still converges, just to
     somewhere else, which no end-to-end comparison would catch.
     """
-    from lairnet._anchor import _init, _objective, ACTIVATIONS
+    from lairnet._anchor import ACTIVATIONS, _init, _objective
     from lairnet._anchor_numba import make_objective
 
     X, y = data
