@@ -1,0 +1,35 @@
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.pkg-smoke/
+build/
+dist/
+*.egg-info/
+docs/_build/
+benchmarks/*.log
+benchmarks/*.json
+benchmarks/*.lock
+
+# Internal release notes: readiness, open decisions and local paths.
+# Not part of the published package and not for the public repository.
+RELEASE_HANDOFF.md
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter scratch state (the executed docs notebooks are committed on purpose)
+.ipynb_checkpoints/

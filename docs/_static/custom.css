@@ -1,0 +1,223 @@
+/* lairnet — pydata-sphinx-theme overrides.
+   Palette is the one the package's own plots use, so a figure dropped into a
+   page belongs to the page rather than sitting on top of it. */
+
+html[data-theme="light"] {
+  --pst-color-primary: #3B2A63;
+  --pst-color-primary-highlight: #31688E;
+  --pst-color-secondary: #B65E05;
+  --pst-color-link: #31688E;
+  --pst-color-link-hover: #1F8A82;
+  --pst-color-inline-code: #B65E05;
+  --pst-color-target: #f4ecdc;
+  --lair-anchor: #B65E05;
+  --lair-stack: #31688E;
+}
+html[data-theme="dark"] {
+  --pst-color-primary: #A78BD8;
+  --pst-color-primary-highlight: #7FB2DA;
+  --pst-color-secondary: #F0A94A;
+  --pst-color-link: #7FB2DA;
+  --pst-color-link-hover: #56C6B4;
+  --pst-color-inline-code: #F0A94A;
+  --lair-anchor: #F0A94A;
+  --lair-stack: #7FB2DA;
+}
+
+/* ---------- hero ---------- */
+.hero-banner {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto 1.4rem;
+  display: block;
+}
+.hero-eyebrow {
+  font-family: var(--pst-font-family-monospace);
+  font-size: 0.74rem;
+  letter-spacing: 0.17em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--pst-color-secondary);
+  margin-bottom: 0.35rem;
+  text-align: center;
+}
+
+/* The landing page's <h1> is a real document title -- the browser tab, the
+   search index and any toctree entry all read it -- styled to look like a hero
+   rather than like a page heading. Doing this with a .. container:: instead
+   left the page with no title at all, which is what it had before. */
+.landing > h1 {
+  font-size: clamp(2rem, 4.4vw, 3.05rem);
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+  font-weight: 700;
+  text-align: center;
+  max-width: 20ch;
+  margin: 0 auto 0.9rem;
+  border-bottom: none;
+}
+.landing > h1 strong {
+  font-weight: 700;
+  background: linear-gradient(
+    100deg, var(--lair-stack) 0%, var(--lair-anchor) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* The theme's anchor-link pilcrow reads as a typo in a hero. */
+.landing > h1 > a.headerlink { display: none; }
+
+/* The theme ships ``.docutils.container { max-width: unset }`` to stop a
+   docutils container behaving like a Bootstrap one, so every width below has
+   to be written at that same specificity or it is silently discarded --
+   which is how the first version of this file rendered: the classes were on
+   the elements and none of the widths took. */
+.hero-lede.docutils.container {
+  font-size: 1.09rem;
+  line-height: 1.62;
+  color: var(--pst-color-text-muted);
+  max-width: 60ch;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+.hero-install.docutils.container {
+  max-width: 24rem;
+  margin: 0 auto 2.8rem;
+}
+.hero-install div.highlight {
+  border-radius: 9px;
+  border: 1px solid var(--pst-color-border);
+}
+.hero-install pre {
+  text-align: center;
+  font-size: 1rem;
+  padding: 0.72rem 1rem;
+}
+
+/* Code on the left, the figure it produces on the right. sphinx-design puts
+   the container class on the outer div and does the columns on the row inside
+   it, so vertical centring has to be applied to the row. */
+.split-hero { margin-bottom: 3rem; }
+.split-hero > .sd-row { align-items: center; }
+.split-hero div.highlight {
+  border-radius: 10px;
+  border: 1px solid var(--pst-color-border);
+}
+.split-hero pre { font-size: 0.82rem; }
+/* The package's plots are drawn for a light background, so every figure is a
+   light card on both themes. The border and radius are what make that read as
+   deliberate rather than as a white rectangle the theme happened to put there.
+
+   The class is carried on the directive rather than matched on the src,
+   because Sphinx copies a referenced image into _images/ and the
+   _static/gallery/ path a selector would look for is gone by then. */
+.hero-figure,
+img.figure-card {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--pst-color-border);
+  background: #ffffff;
+}
+/* The theme already backs content images with white in dark mode, via
+   html[data-theme="dark"] .bd-content img:not(.only-dark, .dark-light), and
+   that selector outranks the one above -- so the radius has to be restated at
+   matching specificity or the theme's 0.25rem wins. */
+html[data-theme="dark"] .bd-content .hero-figure,
+html[data-theme="dark"] .bd-content img.figure-card {
+  border-radius: 10px;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* A section label, not a heading: the landing page has one <h1> and no
+   subsections, so these must not be <h2> or they would claim to be structure
+   the page does not have. */
+.section-lead {
+  font-family: var(--pst-font-family-monospace);
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--pst-color-text-muted);
+  margin: 2.6rem 0 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--pst-color-border);
+}
+
+/* ---------- cards ---------- */
+.model-cards .sd-card {
+  border: 1px solid var(--pst-color-border);
+  border-radius: 10px;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.model-cards .sd-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+}
+.model-cards .sd-card-title {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.sd-card.anchor-card { border-left: 3px solid var(--lair-anchor); }
+.sd-card.stack-card  { border-left: 3px solid var(--lair-stack); }
+
+/* Cards that state a fact rather than link somewhere -- no hover lift, because
+   nothing happens when you click them. */
+.stat-cards .sd-card {
+  border: 1px solid var(--pst-color-border);
+  border-radius: 10px;
+  background: var(--pst-color-surface);
+}
+.stat-cards .sd-card-title {
+  font-family: var(--pst-font-family-monospace);
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: var(--pst-color-secondary);
+}
+.stat-cards .sd-card-body { font-size: 0.9rem; }
+
+/* Landing page only: the theme caps an article at 60em, which leaves a
+   four-card row cramped and the hero floating in a column. Selected via
+   :has() on the landing section rather than a body class, because the theme
+   emits no per-page class to hook. Where :has() is unsupported the page simply
+   keeps the theme's width. The three-class prefix matches the theme's own
+   ``.bd-main .bd-content .bd-article-container``; without it this rule loses
+   on specificity and does nothing. */
+.bd-main .bd-content .bd-article-container:has(section.landing) {
+  max-width: 78rem;
+}
+
+/* ---------- gallery ---------- */
+.gallery-grid img {
+  width: 100%;
+  border-radius: 8px;
+  background: transparent;
+}
+.gallery-grid .sd-card {
+  border: 1px solid var(--pst-color-border);
+  border-radius: 10px;
+}
+.gallery-grid .sd-card-body { padding-top: 0.7rem; }
+
+/* A caption that says what the reader should take from a figure, not what the
+   figure is called. */
+.figure-read {
+  font-size: 0.88rem;
+  color: var(--pst-color-text-muted);
+  border-left: 2px solid var(--pst-color-secondary);
+  padding-left: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+/* ---------- warnings that must not be skimmed ---------- */
+.admonition.not-uncertainty {
+  border-left-color: var(--lair-anchor);
+}
+.admonition.not-uncertainty > .admonition-title {
+  background-color: rgba(182, 94, 5, 0.12);
+}
+
+/* ---------- tables ---------- */
+table.docutils td, table.docutils th { font-size: 0.9rem; }
+table.docutils th { font-weight: 650; }

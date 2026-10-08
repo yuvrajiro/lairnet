@@ -1,0 +1,57 @@
+<svg width="880" height="180" viewBox="0 0 880 180" fill="none" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="LAIR-Net: a randomized state settling onto a target-aware anchor">
+  <!--
+    The same idea as logo.svg at a different scale, and drawn from the same
+    decay law so the two cannot drift apart. The mark uses amplitudes
+    17, 14, 8, 4 in a 48-unit box. Those are the ratios 17:14:8:4, and this
+    banner is the same series halved twice more - 17:14:8:4:2:1 - against a
+    first amplitude of 60, giving 60, 49.412, 28.235, 14.118, 7.059, 3.529.
+    Each control point sits at twice its amplitude, because a quadratic reaches
+    half its control offset. The state stops drifting and settles on the anchor
+    line because that is what the alignment impulse does over depth.
+
+    Two colours plus the accent, matching the mark: blue for the early
+    high-amplitude swings, teal once it is settling, amber only on the anchor.
+    The previous version used a four-stop gradient whose deepest purple had to
+    be patched to survive a dark page; nothing here needs rescuing.
+
+    The dark-mode query follows the operating system rather than the docs theme
+    toggle, because an <img> cannot see the host page's data-theme.
+  -->
+  <style>
+    .stack  { stroke: #31688E }
+    .flow   { stroke: #1F8A82 }
+    .anchor { fill:   #D97706 }
+    .rule   { stroke: #D97706 }
+    .label  { fill:   #D97706 }
+    .quiet  { fill:   #888888 }
+    @media (prefers-color-scheme: dark) {
+      .stack  { stroke: #7FB2DA }
+      .flow   { stroke: #56C6B4 }
+      .anchor { fill:   #F0A94A }
+      .rule   { stroke: #F0A94A }
+      .label  { fill:   #F0A94A }
+      .quiet  { fill:   #9AA0A6 }
+    }
+  </style>
+
+  <line class="rule" x1="40" y1="92" x2="720" y2="92" stroke-width="1.8"
+        stroke-dasharray="5 5" opacity="0.5"/>
+
+  <path class="stack" d="M40 92 Q93.5 -28 147 92 Q200 190.824 253 92"
+        fill="none" stroke-width="5" stroke-linecap="round"/>
+  <path class="flow" d="M253 92 Q306.5 35.529 360 92 Q413.5 120.235 467 92
+                        Q520 77.882 573 92 Q626.5 99.059 680 92 L720 92"
+        fill="none" stroke-width="5" stroke-linecap="round"/>
+
+  <circle class="anchor" cx="720" cy="92" r="9"/>
+  <circle class="rule" cx="720" cy="92" r="17" fill="none"
+          stroke-width="2" opacity="0.42"/>
+
+  <text class="label" x="756" y="86" font-size="15" opacity="0.95"
+        font-family="ui-monospace,SFMono-Regular,Menlo,monospace">anchor</text>
+  <text class="quiet" x="756" y="104" font-size="11"
+        font-family="ui-monospace,SFMono-Regular,Menlo,monospace">fitted once</text>
+  <text class="quiet" x="40" y="152" font-size="12" letter-spacing="0.14em"
+        font-family="ui-monospace,SFMono-Regular,Menlo,monospace">DEPTH &#8594;</text>
+</svg>

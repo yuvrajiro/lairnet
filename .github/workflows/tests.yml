@@ -1,0 +1,62 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    name: python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every version the package claims in its classifiers. Claiming a
+        # version that is never run is a promise nothing checks.
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # [plots] is needed to run the suite at all, not merely to widen it:
+      # tests/test_plotting.py imports matplotlib at module scope, so without
+      # it collection fails outright, and tests/test_estimators.py skips its
+      # DataFrame and feature-name tests without pandas. [dev] alone leaves
+      # both gaps.
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,plots]"
+
+      - name: Test
+        run: python -m pytest -q
+
+  backends:
+    name: optional backends
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The backend policy -- numpy below 5000 samples, numba above, torch
+      # available but never automatic -- is untested by the job above, which
+      # installs neither package, so those tests all skip there. The CPU wheel
+      # index keeps the torch download to a sensible size.
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,plots,speed]"
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Report which backends are available
+        run: python -c "from lairnet import available_backends; print(available_backends())"
+
+      - name: Test
+        run: python -m pytest -q

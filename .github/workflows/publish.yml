@@ -1,0 +1,103 @@
+name: publish
+
+# Publishes to PyPI with Trusted Publishing: PyPI trusts this workflow's OIDC
+# identity, so there is no API token anywhere -- not in the repository, not in
+# the secrets store, not on anyone's laptop. That is why the publish job needs
+# `id-token: write`, and why it is the only permission it has.
+#
+# Setup already done on PyPI (pending publisher):
+#   PyPI project : lairnet
+#   Owner        : yuvrajiro
+#   Repository   : lairnet
+#   Workflow     : publish.yml
+#   Environment  : pypi
+# Still needed once the repository is pushed:
+#   Settings -> Environments -> New environment, named `pypi`. Adding yourself
+#   as a required reviewer there makes a real release wait for a click.
+#
+# How a release happens:
+#   Publish a GitHub Release whose tag is the version, e.g. v0.1.0. The build
+#   job refuses to continue if that tag disagrees with pyproject.toml.
+#
+# Running the workflow by hand builds and verifies without publishing, which is
+# the rehearsal TestPyPI used to provide: it runs the tests, builds, checks the
+# metadata and long description, and leaves the artifacts as a downloadable
+# artifact for inspection. Uploading only ever happens from a published
+# Release, because a PyPI version can never be replaced, only yanked, and a
+# manual run carries no tag to check the version against.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"      # tomllib, used by the version check below
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      # A broken build must not reach PyPI; an upload cannot be taken back.
+      - name: Test
+        run: python -m pytest -q
+
+      # Guards against tagging v0.2.0 while pyproject still says 0.1.0, which
+      # would publish the wrong version under a right-looking tag.
+      - name: Check the tag matches the packaged version
+        if: github.event_name == 'release'
+        run: |
+          python - <<'PY'
+          import os, sys, tomllib
+          version = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
+          tag = os.environ["GITHUB_REF_NAME"].lstrip("v")
+          print(f"pyproject version {version!r}, release tag {tag!r}")
+          if version != tag:
+              sys.exit(f"ABORT: tag {tag!r} does not match the packaged "
+                       f"version {version!r}; fix one of them and re-release.")
+          PY
+
+      - name: Build
+        run: python -m build
+
+      - name: Check metadata and the long description
+        run: python -m twine check --strict dist/*
+
+      - name: Show what would be uploaded
+        run: ls -l dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+          if-no-files-found: error
+
+  pypi:
+    name: Publish to PyPI
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/lairnet
+    permissions:
+      id-token: write          # the only permission Trusted Publishing needs
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      # Pin to a commit SHA instead of release/v1 if you want the action itself
+      # to be immutable; release/v1 is the reference the PyPA documents.
+      - uses: pypa/gh-action-pypi-publish@release/v1

@@ -1,0 +1,44 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="LAIR-Net: a randomized state settling onto its anchor">
+  <!--
+    The mechanism, drawn. A state swings wide, then less, then less, and comes
+    to rest on the anchor. The four amplitudes are 17, 14, 8, 4 - a measured
+    decay rather than four decorative wiggles - because that is what the
+    alignment impulse does to the stack over depth. The dashed rule is the
+    anchor level; the filled dot is the anchor itself, fitted once and mixed
+    into every depth.
+
+    Two colours plus the accent, so the mark also reproduces in a single ink.
+    Blue covers the early high-amplitude swings, teal the settling ones, and
+    amber is spent only on the anchor.
+
+    Everything fits inside the 48-unit box with its stroke included. The
+    previous mark's halo did not: it reached 48.4 and was clipped on the right,
+    which is why it sat slightly off-centre in the navbar.
+
+    The dark-mode query follows the operating system, not the docs theme
+    toggle - an <img> cannot see the host page's data-theme - so the base
+    colours are chosen to stand on either ground unaided.
+  -->
+  <style>
+    .stack  { stroke: #31688E }
+    .flow   { stroke: #1F8A82 }
+    .anchor { fill:   #D97706 }
+    .rule   { stroke: #D97706 }
+    @media (prefers-color-scheme: dark) {
+      .stack  { stroke: #7FB2DA }
+      .flow   { stroke: #56C6B4 }
+      .anchor { fill:   #F0A94A }
+      .rule   { stroke: #F0A94A }
+    }
+  </style>
+  <line class="rule" x1="3" y1="26" x2="37" y2="26" stroke-width="1.5"
+        stroke-dasharray="3 3" opacity="0.42"/>
+  <path class="stack" d="M3 26 Q7 -8 12 26 Q16 54 21 26"
+        fill="none" stroke-width="3.6" stroke-linecap="round"/>
+  <path class="flow" d="M21 26 Q25 10 29 26 Q32 34 34 26 L37 26"
+        fill="none" stroke-width="3.6" stroke-linecap="round"/>
+  <circle class="anchor" cx="37" cy="26" r="4.2"/>
+  <circle class="rule" cx="37" cy="26" r="7.8" fill="none"
+          stroke-width="1.4" opacity="0.42"/>
+</svg>
