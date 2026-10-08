@@ -56,6 +56,7 @@ docs = [
   "pydata-sphinx-theme>=0.15",
   "myst-nb>=1.0",
   "sphinx-design>=0.5",
+  "sphinx-copybutton>=0.5",
   "matplotlib>=3.7",
   "pandas>=1.5",
 ]

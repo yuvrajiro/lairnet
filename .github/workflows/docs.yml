@@ -16,6 +16,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[docs]"
+      # Sphinx stops at the first extension it cannot import, so a missing
+      # dependency reports one name and hides the rest. This names them all,
+      # and fails before the build with a message that says what to add.
+      - name: Check every Sphinx extension is installable from [docs]
+        run: python docs/check_requirements.py
       # Sphinx builds cleanly whether or not a class named in a page has a rule
       # behind it, so this has to be checked separately.
       - name: Check that every page class is styled
