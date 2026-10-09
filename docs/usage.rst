@@ -18,7 +18,6 @@ any change that could move these numbers.
    .. grid-item-card:: 1 · Getting started
       :link: examples/01_getting_started
       :link-type: doc
-      :class-card: stack-card
 
       Fit, predict, and then read the things a randomized network usually will
       not tell you: whether the anchor fit converged, how well conditioned each
@@ -27,7 +26,6 @@ any change that could move these numbers.
    .. grid-item-card:: 2 · Interpreting a fitted model
       :link: examples/02_interpreting_a_model
       :link-type: doc
-      :class-card: anchor-card
 
       Permutation importance on held-out data, the depth curve, how much the
       depths disagree, and what the anchor is actually worth — ending in a
@@ -36,7 +34,6 @@ any change that could move these numbers.
    .. grid-item-card:: 3 · Tuning and model selection
       :link: examples/03_model_selection
       :link-type: doc
-      :class-card: stack-card
 
       ``LAIRNetCV`` and ``default_grid``, the alignment profile across the
       search, and how the estimator behaves inside ``Pipeline``,
@@ -45,7 +42,6 @@ any change that could move these numbers.
    .. grid-item-card:: 4 · Backends and speed
       :link: examples/04_backends_and_speed
       :link-type: doc
-      :class-card: anchor-card
 
       What ``backend="auto"`` picks and why, where the numba threshold came
       from, why torch is never automatic, and using ``AnchorNet`` on its own as

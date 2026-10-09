@@ -31,21 +31,27 @@ CSS = HERE / "_static" / "custom.css"
 EXTERNAL = {
     "sd-card", "sd-row", "sd-container-fluid", "sd-sphinx-override",
     "docutils", "container", "admonition", "topic", "sidebar",
+    # Furo and Sphinx emit these themselves.
+    "highlight", "literal-block-wrapper", "toctree-wrapper",
 }
 
-# Every construct that can put a class on an element in a page source.
+# Every construct that can put a class on an element in a page source. The
+# last one covers raw HTML in the MyST landing page: moving index to .md and
+# hand-written markup would otherwise take that page out of this gate's sight
+# entirely, which is the failure mode the gate exists to prevent.
 PATTERNS = (
     re.compile(r"^\s*\.\.\s+container::\s+(.+)$", re.M),
     re.compile(r"^\s*\.\.\s+rst-class::\s+(.+)$", re.M),
     re.compile(r"^\s*:class(?:-card|-container|-item|-body|-title)?:\s+(.+)$",
                re.M),
+    re.compile(r"""class=["']([^"']+)["']""", re.M),
 )
 
 
 def used_classes() -> dict[str, list[str]]:
     """Map class name -> the pages that name it."""
     found: dict[str, list[str]] = {}
-    for page in sorted(HERE.rglob("*.rst")):
+    for page in sorted([*HERE.rglob("*.rst"), *HERE.rglob("*.md")]):
         if "_build" in page.parts:
             continue
         text = page.read_text(encoding="utf-8")

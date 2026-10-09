@@ -29,7 +29,7 @@ HERE = Path(__file__).resolve().parent
 NOTEBOOK = HERE / "examples" / "02_interpreting_a_model.ipynb"
 # The README quotes the same summary and is the GitHub and PyPI front page, so
 # it drifts exactly as easily as the pages do.
-PAGES = (HERE / "gallery.rst", HERE / "index.rst",
+PAGES = (HERE / "gallery.rst", HERE / "index.md",
          HERE.parent / "README.md")
 
 # Lines that carry a number and appear in both the notebook output and the

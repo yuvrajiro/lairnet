@@ -1,223 +1,501 @@
-/* lairnet — pydata-sphinx-theme overrides.
-   Palette is the one the package's own plots use, so a figure dropped into a
-   page belongs to the page rather than sitting on top of it. */
+/* LAIR-Net documentation -- monochrome editorial layer over Furo.
+ *
+ * Rules of the house, so later edits do not drift:
+ *   - typography carries the design, never colour;
+ *   - black, white and greys only, no accent anywhere;
+ *   - structure is made of 1px hairlines, not fills, gradients or shadows;
+ *   - every colour comes from a Furo variable, so dark mode follows for free.
+ *
+ * Furo flips --color-* under .dark automatically, which is why nothing below
+ * hard-codes a grey except the hero's grid paper, where the lines must stay
+ * faint against both grounds and are therefore given per-mode values.
+ */
 
-html[data-theme="light"] {
-  --pst-color-primary: #3B2A63;
-  --pst-color-primary-highlight: #31688E;
-  --pst-color-secondary: #B65E05;
-  --pst-color-link: #31688E;
-  --pst-color-link-hover: #1F8A82;
-  --pst-color-inline-code: #B65E05;
-  --pst-color-target: #f4ecdc;
-  --lair-anchor: #B65E05;
-  --lair-stack: #31688E;
+:root {
+  --ln-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --ln-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ln-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  --ln-radius: 10px;
 }
-html[data-theme="dark"] {
-  --pst-color-primary: #A78BD8;
-  --pst-color-primary-highlight: #7FB2DA;
-  --pst-color-secondary: #F0A94A;
-  --pst-color-link: #7FB2DA;
-  --pst-color-link-hover: #56C6B4;
-  --pst-color-inline-code: #F0A94A;
-  --lair-anchor: #F0A94A;
-  --lair-stack: #7FB2DA;
+
+body {
+  /* Must live here, not on :root: Furo sets --color-* on body, so a composite
+     declared above it resolves against an undefined variable and every
+     `border: var(--ln-hairline)` silently becomes no border at all. */
+  --ln-hairline: 1px solid var(--color-background-border);
+}
+
+body,
+.sidebar-drawer,
+.toc-drawer {
+  font-family: var(--ln-sans);
+}
+
+code,
+kbd,
+pre,
+samp,
+.sig,
+.sig-name {
+  font-family: var(--ln-mono);
+}
+
+/* ---------- headings ---------- */
+
+h1 {
+  font-family: var(--ln-serif);
+  font-size: 2.7rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+h2 {
+  font-family: var(--ln-sans);
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.35rem;
+  border-bottom: var(--ln-hairline);
+  text-wrap: balance;
+}
+
+h3,
+h4,
+h5 {
+  font-family: var(--ln-sans);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* The brand in the sidebar is a wordmark, so it takes the display face. */
+.sidebar-brand-text {
+  font-family: var(--ln-serif);
+  font-weight: 400;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- code, admonitions, tables ---------- */
+
+div.highlight,
+pre {
+  border-radius: var(--ln-radius);
+}
+
+div.highlight {
+  border: var(--ln-hairline);
+}
+
+.admonition,
+div.admonition {
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  box-shadow: none;
+}
+
+/* Wide tables must stay scrollable on a phone. overflow: hidden would clip
+   them instead, so the radius is applied without it. */
+table.docutils {
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table.docutils th,
+table.docutils td {
+  border: none;
+  border-bottom: var(--ln-hairline);
+  font-size: 0.92rem;
+}
+
+table.docutils tr:last-child td {
+  border-bottom: none;
+}
+
+table.docutils th {
+  font-weight: 600;
+  background: var(--color-background-secondary);
+}
+
+/* ---------- figures ---------- */
+
+.ln-figure {
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  padding: 1rem;
+  margin: 1.75rem 0;
+  background: var(--color-background-primary);
+}
+
+.ln-figure img {
+  width: 100%;
+  display: block;
+  border-radius: calc(var(--ln-radius) - 4px);
+}
+
+.ln-figure figcaption,
+.ln-caption {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-foreground-muted);
 }
 
 /* ---------- hero ---------- */
-.hero-banner {
-  width: 100%;
-  max-width: 880px;
-  margin: 0 auto 1.4rem;
-  display: block;
+
+.ln-hero {
+  position: relative;
+  /* clip, not hidden: `hidden` makes this a scroll container, and Furo's
+     floating edit icons then narrow the hero on wide screens. */
+  overflow: clip;
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  padding: 3.25rem 2.25rem 2.75rem;
+  margin-bottom: 2.75rem;
 }
-.hero-eyebrow {
-  font-family: var(--pst-font-family-monospace);
-  font-size: 0.74rem;
-  letter-spacing: 0.17em;
-  font-weight: 600;
+
+/* Grid paper: two hairline gradients on 28px cells, faded out behind the text
+   by a radial overlay so the words never sit on a ruled line. */
+.ln-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--ln-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--ln-grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 30% 40%, transparent 0%, black 100%);
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 30% 40%, transparent 0%, black 100%);
+  pointer-events: none;
+}
+
+body {
+  --ln-grid: rgba(17, 17, 17, 0.07);
+}
+
+body[data-theme="dark"] {
+  --ln-grid: rgba(242, 242, 242, 0.07);
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme="light"]) {
+    --ln-grid: rgba(242, 242, 242, 0.07);
+  }
+}
+
+.ln-hero > * {
+  position: relative;
+}
+
+.ln-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--ln-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--pst-color-secondary);
-  margin-bottom: 0.35rem;
-  text-align: center;
+  color: var(--color-foreground-muted);
+  border: var(--ln-hairline);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  margin-bottom: 1.5rem;
 }
 
-/* The landing page's <h1> is a real document title -- the browser tab, the
-   search index and any toctree entry all read it -- styled to look like a hero
-   rather than like a page heading. Doing this with a .. container:: instead
-   left the page with no title at all, which is what it had before. */
-.landing > h1 {
-  font-size: clamp(2rem, 4.4vw, 3.05rem);
-  line-height: 1.12;
-  letter-spacing: -0.024em;
-  font-weight: 700;
-  text-align: center;
-  max-width: 20ch;
-  margin: 0 auto 0.9rem;
-  border-bottom: none;
-}
-.landing > h1 strong {
-  font-weight: 700;
-  background: linear-gradient(
-    100deg, var(--lair-stack) 0%, var(--lair-anchor) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-/* The theme's anchor-link pilcrow reads as a typo in a hero. */
-.landing > h1 > a.headerlink { display: none; }
-
-/* The theme ships ``.docutils.container { max-width: unset }`` to stop a
-   docutils container behaving like a Bootstrap one, so every width below has
-   to be written at that same specificity or it is silently discarded --
-   which is how the first version of this file rendered: the classes were on
-   the elements and none of the widths took. */
-.hero-lede.docutils.container {
-  font-size: 1.09rem;
-  line-height: 1.62;
-  color: var(--pst-color-text-muted);
-  max-width: 60ch;
-  margin: 0 auto 1.5rem;
-  text-align: center;
+.ln-title {
+  font-family: var(--ln-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.5vw, 3.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.1rem;
+  color: var(--color-foreground-primary);
 }
 
-.hero-install.docutils.container {
-  max-width: 24rem;
-  margin: 0 auto 2.8rem;
+.ln-title em {
+  font-style: italic;
+  color: var(--color-foreground-secondary);
 }
-.hero-install div.highlight {
-  border-radius: 9px;
-  border: 1px solid var(--pst-color-border);
+
+.ln-lead {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-foreground-secondary);
+  max-width: 36rem;
+  margin: 0 0 1.9rem;
 }
-.hero-install pre {
-  text-align: center;
+
+.ln-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.ln-btn,
+.ln-btn:visited {
+  display: inline-block;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--ln-radius);
+  border: 1px solid var(--color-foreground-primary);
+  text-decoration: none;
+  transition: transform 0.14s ease, background 0.14s ease, color 0.14s ease;
+}
+
+.ln-btn-solid,
+.ln-btn-solid:visited {
+  background: var(--color-foreground-primary);
+  color: var(--color-background-primary);
+}
+
+.ln-btn-ghost,
+.ln-btn-ghost:visited {
+  background: transparent;
+  color: var(--color-foreground-primary);
+}
+
+.ln-btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.ln-install {
+  font-family: var(--ln-mono);
+  font-size: 0.86rem;
+  padding: 0.55rem 1rem;
+  border: 1px dashed var(--color-background-border);
+  border-radius: var(--ln-radius);
+  color: var(--color-foreground-secondary);
+  white-space: nowrap;
+}
+
+/* ---------- feature cards ---------- */
+
+.ln-cards {
+  display: grid;
+  /* 14rem, not 16: Furo's reading column is 46rem, and at 16rem the three
+     cards need 800px and wrap to 2 + 1. */
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 2.25rem 0;
+}
+
+.ln-card {
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  padding: 1.4rem 1.3rem;
+  transition: transform 0.14s ease, border-color 0.14s ease;
+}
+
+.ln-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-foreground-primary);
+}
+
+.ln-card svg {
+  display: block;
+  margin-bottom: 0.9rem;
+  color: var(--color-foreground-primary);
+}
+
+.ln-card h3 {
   font-size: 1rem;
-  padding: 0.72rem 1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
 }
 
-/* Code on the left, the figure it produces on the right. sphinx-design puts
-   the container class on the outer div and does the columns on the row inside
-   it, so vertical centring has to be applied to the row. */
-.split-hero { margin-bottom: 3rem; }
-.split-hero > .sd-row { align-items: center; }
-.split-hero div.highlight {
-  border-radius: 10px;
-  border: 1px solid var(--pst-color-border);
+.ln-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-foreground-muted);
 }
-.split-hero pre { font-size: 0.82rem; }
-/* The package's plots are drawn for a light background, so every figure is a
-   light card on both themes. The border and radius are what make that read as
-   deliberate rather than as a white rectangle the theme happened to put there.
 
-   The class is carried on the directive rather than matched on the src,
-   because Sphinx copies a referenced image into _images/ and the
-   _static/gallery/ path a selector would look for is gone by then. */
-.hero-figure,
+/* ---------- numbered strip ---------- */
+
+.ln-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
+  margin: 2.25rem 0;
+}
+
+.ln-step {
+  position: relative;
+  padding: 1.4rem 1.25rem;
+  border-right: var(--ln-hairline);
+}
+
+.ln-step:last-child {
+  border-right: none;
+}
+
+.ln-step-num {
+  font-family: var(--ln-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  color: var(--color-foreground-muted);
+}
+
+.ln-step h3 {
+  font-family: var(--ln-serif);
+  font-weight: 400;
+  font-size: 1.22rem;
+  letter-spacing: -0.01em;
+  margin: 0.45rem 0 0.35rem;
+}
+
+.ln-step p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-foreground-muted);
+}
+
+.ln-step-arrow {
+  position: absolute;
+  top: 1.45rem;
+  right: -0.52rem;
+  font-size: 0.8rem;
+  color: var(--color-foreground-muted);
+  background: var(--color-background-primary);
+  padding: 0 0.18rem;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .ln-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ln-step:nth-child(2n) {
+    border-right: none;
+  }
+  .ln-step:nth-child(-n + 2) {
+    border-bottom: var(--ln-hairline);
+  }
+  .ln-step-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ln-steps {
+    grid-template-columns: 1fr;
+  }
+  .ln-step {
+    border-right: none;
+    border-bottom: var(--ln-hairline);
+  }
+  .ln-step:last-child {
+    border-bottom: none;
+  }
+  .ln-hero {
+    padding: 2.25rem 1.25rem 2rem;
+  }
+}
+
+/* ---------- citation ---------- */
+
+.ln-cite {
+  font-family: var(--ln-serif);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  border-left: 2px solid var(--color-foreground-primary);
+  background: var(--color-background-secondary);
+  border-radius: 0 var(--ln-radius) var(--ln-radius) 0;
+  padding: 1.1rem 1.3rem;
+  margin: 2rem 0;
+  color: var(--color-foreground-secondary);
+  overflow-x: auto;
+}
+
+/* ---------- sphinx-design cards, kept in the same language ---------- */
+
+.sd-card {
+  border: var(--ln-hairline) !important;
+  border-radius: var(--ln-radius) !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transition: transform 0.14s ease, border-color 0.14s ease;
+}
+
+.sd-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-foreground-primary) !important;
+}
+
+.sd-card-title {
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* ---------- landing page only ---------- */
+
+/* The H1 stays in the document for the <title> and the search index, but the
+   hero already carries the headline, so showing both would say it twice.
+   Matched through :has() on the hero, so it applies to the landing page and
+   nothing else without needing a per-page body class, which Furo does not
+   emit. */
+article:has(.ln-hero) h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- footer ---------- */
+
+/* The GitHub icon is configured in conf.py; the "Made with Sphinx" credit is
+   noise on a documentation site that already names its tools in Development. */
+.bottom-of-page .left-details {
+  display: none;
+}
+
+.bottom-of-page {
+  border-top: var(--ln-hairline);
+}
+
+/* ---------- classes the content pages carry ---------- */
+
+/* Grid of sphinx-design cards on the API index and the notebook index. */
+.model-cards {
+  margin: 1.75rem 0;
+}
+
+/* The package's plots are drawn on a light ground, so a figure is presented as
+   a light card in both modes rather than inverted or left to float. */
 img.figure-card {
   width: 100%;
-  border-radius: 10px;
-  border: 1px solid var(--pst-color-border);
+  border: var(--ln-hairline);
+  border-radius: var(--ln-radius);
   background: #ffffff;
 }
-/* The theme already backs content images with white in dark mode, via
-   html[data-theme="dark"] .bd-content img:not(.only-dark, .dark-light), and
-   that selector outranks the one above -- so the radius has to be restated at
-   matching specificity or the theme's 0.25rem wins. */
-html[data-theme="dark"] .bd-content .hero-figure,
-html[data-theme="dark"] .bd-content img.figure-card {
-  border-radius: 10px;
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
-}
 
-/* A section label, not a heading: the landing page has one <h1> and no
-   subsections, so these must not be <h2> or they would claim to be structure
-   the page does not have. */
-.section-lead {
-  font-family: var(--pst-font-family-monospace);
-  font-size: 0.76rem;
-  letter-spacing: 0.15em;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--pst-color-text-muted);
-  margin: 2.6rem 0 1rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid var(--pst-color-border);
-}
-
-/* ---------- cards ---------- */
-.model-cards .sd-card {
-  border: 1px solid var(--pst-color-border);
-  border-radius: 10px;
-  transition: transform 0.14s ease, box-shadow 0.14s ease;
-}
-.model-cards .sd-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
-}
-.model-cards .sd-card-title {
-  font-weight: 650;
-  letter-spacing: -0.01em;
-}
-.sd-card.anchor-card { border-left: 3px solid var(--lair-anchor); }
-.sd-card.stack-card  { border-left: 3px solid var(--lair-stack); }
-
-/* Cards that state a fact rather than link somewhere -- no hover lift, because
-   nothing happens when you click them. */
-.stat-cards .sd-card {
-  border: 1px solid var(--pst-color-border);
-  border-radius: 10px;
-  background: var(--pst-color-surface);
-}
-.stat-cards .sd-card-title {
-  font-family: var(--pst-font-family-monospace);
-  font-size: 0.9rem;
-  font-weight: 650;
-  color: var(--pst-color-secondary);
-}
-.stat-cards .sd-card-body { font-size: 0.9rem; }
-
-/* Landing page only: the theme caps an article at 60em, which leaves a
-   four-card row cramped and the hero floating in a column. Selected via
-   :has() on the landing section rather than a body class, because the theme
-   emits no per-page class to hook. Where :has() is unsupported the page simply
-   keeps the theme's width. The three-class prefix matches the theme's own
-   ``.bd-main .bd-content .bd-article-container``; without it this rule loses
-   on specificity and does nothing. */
-.bd-main .bd-content .bd-article-container:has(section.landing) {
-  max-width: 78rem;
-}
-
-/* ---------- gallery ---------- */
-.gallery-grid img {
-  width: 100%;
-  border-radius: 8px;
-  background: transparent;
-}
-.gallery-grid .sd-card {
-  border: 1px solid var(--pst-color-border);
-  border-radius: 10px;
-}
-.gallery-grid .sd-card-body { padding-top: 0.7rem; }
-
-/* A caption that says what the reader should take from a figure, not what the
-   figure is called. */
+/* A caption that says what to take from a figure, not what it is called. */
 .figure-read {
   font-size: 0.88rem;
-  color: var(--pst-color-text-muted);
-  border-left: 2px solid var(--pst-color-secondary);
-  padding-left: 0.7rem;
-  margin-top: 0.5rem;
+  line-height: 1.55;
+  color: var(--color-foreground-muted);
+  border-left: var(--ln-hairline);
+  padding-left: 0.85rem;
+  margin-top: 0.6rem;
 }
 
-/* ---------- warnings that must not be skimmed ---------- */
+/* The prediction-band caveat is the one warning on the site that must not be
+   skimmed, so it gets a solid rule where other admonitions get a hairline. */
 .admonition.not-uncertainty {
-  border-left-color: var(--lair-anchor);
+  border-left: 2px solid var(--color-foreground-primary);
 }
-.admonition.not-uncertainty > .admonition-title {
-  background-color: rgba(182, 94, 5, 0.12);
-}
-
-/* ---------- tables ---------- */
-table.docutils td, table.docutils th { font-size: 0.9rem; }
-table.docutils th { font-weight: 650; }
