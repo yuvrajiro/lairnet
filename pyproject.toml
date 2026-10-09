@@ -75,6 +75,7 @@ all = [
 
 [project.urls]
 Documentation = "https://lairnet.statml.in/"
+Paper = "https://arxiv.org/abs/2610.11538"
 Source = "https://github.com/yuvrajiro/lairnet"
 Issues = "https://github.com/yuvrajiro/lairnet/issues"
 

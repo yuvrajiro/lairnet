@@ -250,3 +250,23 @@ claim until the benchmark records support it.
 python -m build
 twine check dist/*
 ```
+
+## Citation
+
+If you use LAIR-Net in academic work, please cite the paper:
+
+> Goswami, R., Bhambu, A. and Karmakar, B. *LAIR-Net: Leaky Alignment-Impulse
+> Residual Networks for Tabular Regression.* arXiv:2610.11538, 2026.
+
+```bibtex
+@misc{goswami2026lairnet,
+  title  = {LAIR-Net: Leaky Alignment-Impulse Residual Networks for Tabular Regression},
+  author = {Rahul Goswami and Aryan Bhambu and Bittu Karmakar},
+  year   = {2026},
+  eprint = {2610.11538},
+  archivePrefix = {arXiv},
+  primaryClass  = {stat.ML},
+  url    = {https://arxiv.org/abs/2610.11538}
+}
+```
+

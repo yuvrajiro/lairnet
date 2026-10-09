@@ -143,11 +143,22 @@ note is then measured on the training data.
 </figure>
 
 <div class="ln-cite">
-  If you use LAIR-Net in academic work, please cite the accompanying paper.
-  Until it appears, cite the software release: <em>LAIR-Net: leaky
-  alignment-impulse randomized networks for tabular regression</em>, version
-  0.1.0, 2026.
+  Goswami, R., Bhambu, A. and Karmakar, B. <em>LAIR-Net: Leaky
+  Alignment-Impulse Residual Networks for Tabular Regression.</em>
+  arXiv:2610.11538, 2026.
 </div>
+```
+
+```bibtex
+@misc{goswami2026lairnet,
+  title  = {LAIR-Net: Leaky Alignment-Impulse Residual Networks for Tabular Regression},
+  author = {Rahul Goswami and Aryan Bhambu and Bittu Karmakar},
+  year   = {2026},
+  eprint = {2610.11538},
+  archivePrefix = {arXiv},
+  primaryClass  = {stat.ML},
+  url    = {https://arxiv.org/abs/2610.11538}
+}
 ```
 
 ```{toctree}

@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use LAIR-Net, please cite the paper below."
+title: lairnet
+abstract: >-
+  Leaky alignment-impulse residual networks for tabular regression: a stack of
+  fixed random layers pulled part-way back towards an anchor fitted to the
+  target, with a closed-form ridge readout at every depth.
+type: software
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/yuvrajiro/lairnet"
+url: "https://lairnet.statml.in/"
+keywords:
+  - randomized neural networks
+  - tabular regression
+  - ridge regression
+  - interpretability
+  - scikit-learn
+authors:
+  - family-names: Goswami
+    given-names: Rahul
+  - family-names: Bhambu
+    given-names: Aryan
+  - family-names: Karmakar
+    given-names: Bittu
+
+# What a citation should actually point at: the paper, not the release.
+preferred-citation:
+  type: article
+  title: "LAIR-Net: Leaky Alignment-Impulse Residual Networks for Tabular Regression"
+  year: 2026
+  url: "https://arxiv.org/abs/2610.11538"
+  authors:
+    - family-names: Goswami
+      given-names: Rahul
+    - family-names: Bhambu
+      given-names: Aryan
+    - family-names: Karmakar
+      given-names: Bittu
+  identifiers:
+    - type: other
+      value: "arXiv:2610.11538"
+      description: arXiv preprint identifier
